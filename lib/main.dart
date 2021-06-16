@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
-
+import 'package:project_uts/login/login_user.dart';
+import 'package:project_uts/stokbarang/list_stokbarang.dart';
 
 //import halaman yang akan diload kemusian beri alias
-import './beranda.dart' as beranda;
-import './produklist.dart' as listproduk;
-import 'iu/home.dart' as Home;
 
+import 'beranda.dart';
+import 'iu/home.dart';
+import 'localhost/list_mahasiswa.dart' as ListPelanggan;
+import 'produklist.dart';
 
 //top level root
 void main() {
   runApp(new MaterialApp(
     title: "tab Bar",
-    home: new MyApp(),
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData(primarySwatch: Colors.deepOrange),
+    home: new Login(),
   ));
 }
 
 //menggunakan StatefulWidget
 class MyApp extends StatefulWidget {
+  final String id_user;
+  const MyApp({Key key, this.id_user}) : super(key: key);
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -24,50 +31,44 @@ class MyApp extends StatefulWidget {
 //panggil juga SingleTickerProviderStateMixin
 class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   //deklarasikan variabel controller untuk mengatur tabbar
-  TabController controller;
-  //tambah initState unutk inisialisasi dan mengaktifkan tab
-  @override
-  void initState() {
-    controller = new TabController(length: 3, vsync: this);
-    super.initState();
-  }
-
-  //tambah dispose unutk berpindah halaman
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+  int _currentIndex = 0;
+  List<Map> _listNav = [
+    {'icon': Icons.home, 'label': 'Home'},
+    {'icon': Icons.list, 'label': 'List'},
+    {'icon': Icons.shopping_cart, 'label': 'Penjualan'},
+    {'icon': Icons.add_chart, 'label': 'Pelanggan'},
+    {'icon': Icons.add_outlined, 'label': 'Stok'},
+  ];
+  List<Widget> _listPage = [
+    Beranda(),
+    Produklist(),
+    Home(),
+    ListPelanggan.ListMahasiswa(),
+    ListStok()
+  ];
 
   @override
   Widget build(BuildContext context) {
     //gunakan widget Scaffold
     return Scaffold(
-      //widget TabBarView
-      body: new TabBarView(
-        //terdapat controller untuk mengatur halaman
-        controller: controller,
-        children: <Widget>[
-          //pemanggil halaman dimulai dari alias.ClassName halaman yang diload
-          new beranda.Beranda(),
-          new listproduk.Produklist(),
-          new Home.Home(),
-        ],
-      ),
-      //membuat bottom tab
-      bottomNavigationBar: new Material(
-        color: Colors.deepOrange,
-        child: new TabBar(
-          controller: controller,
-          tabs: <Widget>[
-            //menggunakan icon untuk mempercantik tab
-            //icon berurutan sesuai penggilan halaman
-            new Tab(icon: new Icon(Icons.home)),
-            new Tab(icon: new Icon(Icons.list)),
-            new Tab(icon: new Icon(Icons.add_chart)),
-          ],
-        ),
-      ),
+      body: _listPage[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Color(0xFFDAB68C),
+          currentIndex: _currentIndex,
+          selectedItemColor: Colors.deepOrange,
+          unselectedItemColor: Colors.grey,
+          showUnselectedLabels: false,
+          onTap: (newValue) {
+            setState(() {
+              _currentIndex = newValue;
+            });
+          },
+          items: List.generate(_listNav.length, (index) {
+            return BottomNavigationBarItem(
+              label: _listNav[index]['label'],
+              icon: Icon(_listNav[index]['icon']),
+            );
+          })),
     );
   }
 }

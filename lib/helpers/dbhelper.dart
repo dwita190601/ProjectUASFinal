@@ -24,7 +24,7 @@ class DbHelper {
   void _createDb(Database db, int version) async {
     await db.execute('''
                   CREATE TABLE penjualan (
-                    id INTEGER PRIMARY KEY AUTOINCREAMENT,
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT,
                     desc TEXT,
                     jumlah TEXT,

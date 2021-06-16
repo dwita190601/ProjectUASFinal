@@ -52,7 +52,7 @@ class _DetailProdukState extends State<DetailProduk> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [const Color(0xFFFB8C00), const Color(0xFFFFB74D)],
+                  // colors: [const Color(0xFFFB8C00), const Color(0xFFFFB74D)],
                 ),
               ),
               padding: EdgeInsets.all(10),
